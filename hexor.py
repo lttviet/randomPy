@@ -1,23 +1,24 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# xor 2 hex strings
+# xor 2 equal-length hex strings
 
 import string
 
 def isHex(s):
-    '''Check if it is a hex string'''
-    if (len(s) == 0 or len(s) % 2 != 0
-                         or not all(c in string.hexdigits for c in s)):
-        return False
-    return True
+    """
+    Return True if s is a hex string, else False.
+    A hex string has non-negative even length,
+    and all characters belongs to string.hexdigits.
+    """
+    return (len(s) != 0 and len(s) % 2 == 0
+                        and all(c in string.hexdigits for c in s))
 
 def hexor(s1, s2):
-    '''xor 2 hex strings, returning a hex string'''
-    s3 = (int(c1,16) ^ int(c2,16) for (c1,c2) in zip(s1,s2))
-    res = ""
-    for c in s3:
-        res += "{:x}".format(c)
-    return res
+    """
+    XOR 2 hex strings, returns a hex string.
+    """
+    result = int(s1, 16) ^ int(s2, 16)
+    return "{:x}".format(result)
 
 if __name__ == "__main__":
     while True:
@@ -25,6 +26,5 @@ if __name__ == "__main__":
         s2 = input("Second string: ")
         if not isHex(s1) or not isHex(s2):
             print("Your hex string(s) are invalid!")
-            continue
         else:
-            print("Result:       ", hexor(s1,s2))
+            print("Result: ", hexor(s1,s2))
