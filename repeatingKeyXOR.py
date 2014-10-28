@@ -4,30 +4,26 @@
 
 import sys
 import itertools
+import util
 
-KEY = "ICE"
-charKey = itertools.cycle(KEY)
-
-def encrypt(text, key=KEY):
+def encrypt(text, key):
     """
     XOR the plain text with a repeating key.
     Returns the encrypted text in hex string.
     """
-    # XOR 2 characters
-    xor = lambda x, y : ord(x) ^ ord(y)
+    charKey = itertools.cycle(key)
     cipher = ""
     for char in text:
-        cipher += "{:02x}".format(xor(char, next(charKey)))
+        cipher += "{:02x}".format(util.xorUni(char, next(charKey)))
     return cipher
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
+    if len(sys.argv) != 2:
         print("Usage:\t{} [path/]filename".format(sys.argv[0]))
-    if len(sys.argv) == 2:
-        try:
-            for line in open(sys.argv[1]):
-                # the eof symbol will also be encrypted
-                # remove last 2 chars if eof is unwanted
-                print(encrypt(line))
-        except IOError:
-            print("Couldn't open the file {}".format(sys.argv[1]))
+
+    try:
+        with open(sys.argv[1]) as f:
+            text = f.read()
+            print(encrypt(text[:-1], "ICE"))
+    except IOError:
+        print("Couldn't open the file {}".format(sys.argv[1]))
